@@ -17,4 +17,8 @@ app.get('/obj', (req, res) => {
 	res.sendFile(path.join(__dirname, './obj.obj'))
 })
 
+app.use((error, req, res, next) => {
+	res.status(500).send({ error: error.message })
+})
+
 app.listen(process.env.PORT || 3000)
