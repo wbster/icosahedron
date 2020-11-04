@@ -18,7 +18,7 @@ loadObject()
 		regl.frame(render(regl, mesh))
 	})
 
-function render(regl, mesh, animationTime = 30) {
+function render(regl, mesh, animationTime = 45) {
 	return ({ time }) => {
 		regl.clear({
 			color: [0, 0, 0, 0],
