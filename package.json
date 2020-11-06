@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
     "dev": "webpack --watch --mode development & nodemon --ignore src --ignore dist app.js"
   },
   "keywords": [],

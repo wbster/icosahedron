@@ -10,7 +10,11 @@ function loadObject() {
 loadObject()
 	.then(source => decode(source))
 	.then(scene => {
-		const regl = REGL({ canvas: document.querySelector('canvas') })
+		const canvas = document.querySelector('canvas')
+		console.log('canvas', canvas)
+		canvas.width = innerWidth
+		canvas.height = innerHeight
+		const regl = REGL({ canvas })
 		const sphere = scene.Icosphere
 		const center = getCenter(sphere)
 		const floatValue = createFloatValue(center)
@@ -25,9 +29,10 @@ function render(regl, mesh, animationTime = 45) {
 			depth: 1
 		})
 		const loopTime = Math.abs((time % animationTime) / animationTime)
+		const { devicePixelRatio = 1 } = window
 		mesh({
 			time: loopTime,
-			screenSize: [innerWidth, innerHeight]
+			screenSize: [innerWidth * devicePixelRatio, innerHeight * devicePixelRatio]
 		})
 	}
 }

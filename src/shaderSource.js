@@ -16,12 +16,13 @@ void main() {
 		gl_FragColor = vec4(mix(vec3(0.9), mix(color, vec3(0.7), 1.0 - dot(ref, cameraPosition)), 1.0 - v_position.z), 1.0);
 	} else {
 		discard;
+		// gl_FragColor = vec4(1.0);
 	}
 }`
 
 export const vertexShader = `
+precision highp float;
 const float PI = 3.141527;
-precision mediump float;
 attribute vec3 position;
 attribute vec3 normal;
 attribute vec3 center;
@@ -35,17 +36,17 @@ varying vec3 v_normal;
 varying vec2 vUv;
 
 vec3 rotateZ(vec3 point, float angle) {
-	point.xy = vec2(point.x * cos(angle) + point.y * sin(angle),point.x * -sin(angle) + point.y * cos(angle)); // rotate
+	point.xy = vec2(point.x * cos(angle) + point.y * sin(angle), point.x * -sin(angle) + point.y * cos(angle)); // rotate
 	return point;
 }
 
 vec3 rotateY(vec3 point, float angle) {
-	point.xz = vec2(point.x * cos(angle) + point.z * sin(angle),point.x * -sin(angle) + point.z * cos(angle)); // rotate
+	point.xz = vec2(point.x * cos(angle) + point.z * sin(angle), point.x * -sin(angle) + point.z * cos(angle)); // rotate
 	return point;
 }
 
 vec3 rotateX(vec3 point, float angle) {
-	point.yz = vec2(point.y * cos(angle) + point.z * sin(angle),point.y * -sin(angle) + point.z * cos(angle)); // rotate
+	point.yz = vec2(point.y * cos(angle) + point.z * sin(angle), point.y * -sin(angle) + point.z * cos(angle)); // rotate
 	return point;
 }
 
@@ -58,17 +59,17 @@ void main() {
 	float angle = time * circle; // angle rotate
 
 	vUv = uv;
-	v_normal = rotateY(normal, angle);
+	v_normal = rotateZ(rotateY(normal, cropTime(time, 0.20) * circle), circle * time);
 
 	vec3 point = vec3(cos(cropTime(time, 0.25) * circle), 0.0, sin(cropTime(time, 0.25) * circle)) * 0.30;
 	float dis = distance(point, center);
-	vec3 pos = mix(position, position + (normalize(center - point)), (1.0 - min(dis, 1.0)) / 2.0 * step(floatValue, 0.5));
+	vec3 pos = mix(position, position + (normalize(center - point)), (1.0 - min(dis, 1.0)) / 2.0 * step(floatValue, 0.35));
 
 	// rotate
 	pos = rotateY(pos, cropTime(time, 0.20) * circle);
-	v_position = pos;
 	pos = rotateZ(pos, circle * time);
 	pos.xz += rotateY(vec3(0.2, 0.0, 0.2), cropTime(time, 0.20) * circle).xz;
+	v_position = pos;
 	// size
 	pos.xy = (pos.xy / screenSize) * 800.0;
 
